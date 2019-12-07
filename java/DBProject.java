@@ -1187,7 +1187,7 @@ public class DBProject {
       // ...
    }//end numberOfBookedRooms
    
-   public static void listHotelRoomBookingsForAWeek(DBProject esql){
+public static void listHotelRoomBookingsForAWeek(DBProject esql){
 	  // Given a hotelID, date - list all the rooms available for a week(including the input date) 
       // Your code goes here.
 	int hotelID;
@@ -1205,7 +1205,7 @@ public class DBProject {
         int yearInput;
         int monthInput;
         int dayInput;
-        boolean isLeap = false;
+        
 
                 while(true) {
                         System.out.print("Input booking date year: ");
@@ -1225,19 +1225,7 @@ public class DBProject {
                         }
 
                 };
-		if(yearInput % 4 == 0) {
-                        if(yearInput % 100 == 0) {
-                                if(yearInput % 400 == 0) {
-                                        isLeap = true;
-                                } else {
-                                        isLeap = false;
-                                }
-                        } else {
-                                isLeap = true;
-                         }
-                
-
-          while(true) {
+                while(true) {
                   System.out.print("Input booking date month: ");
                   try {
 
@@ -1254,7 +1242,8 @@ public class DBProject {
                           continue;
                   }
           };
-
+	
+                   
 	 while(true) {
                   System.out.print("Input booking date day: ");
                   try {
@@ -1304,8 +1293,8 @@ public class DBProject {
                 } catch (Exception e) {
                         System.err.println("Query failed: " + e.getMessage());
             }
-         }
-
+         
+      
    }//end listHotelRoomBookingsForAWeek
    
    public static void topKHighestRoomPriceForADateRange(DBProject esql){
@@ -1592,9 +1581,43 @@ public class DBProject {
    
    public static void numberOfRepairsForEachRoomPerYear(DBProject esql){
 	  // Given a hotelID, roomNo, get the count of repairs per year
-      // Your code goes here
-    
-      // ...
+   int hotelID;
+   int roomNum;
+   while(true) {
+     System.out.println("Please enter a hotel ID: ");
+     try {
+        hotelID = Integer.parseInt(in.readLine());
+        break;
+     } catch (Exception e) {
+        System.out.println("Your input is invalid!");
+     }
+  }
+  
+  
+  while(true) {
+     System.out.println("Please enter a room number: ");
+     try {
+        roomNum = Integer.parseInt(in.readLine());
+        break;
+     } catch (Exception e) {
+        System.out.println("Your input is invalid!");
+     }
+  }
+  
+   
+   String query;
+   try {
+      System.out.println(
+      "\n\n-------------------------------------\n" +
+      "              FIND REPAIRS PER YEAR      	               \n" +
+      "------------------------------------------\n");
+      query = "SELECT EXTRACT (YEAR FROM R.repairDate), COUNT(R.repairType) FROM Repair R WHERE R.roomNo = " + roomNum + " AND R.hotelID = " + hotelID + " GROUP BY EXTRACT(YEAR FROM R.repairDate) ORDER BY EXTRACT(YEAR FROM R.repairDate) DESC";
+      esql.executeQuery(query);
+      System.out.println(
+         "\n\n-------------------------------------\n");
+  } catch (Exception e) {
+     System.err.println(e.getMessage());
+  }
    }//end listRepairsMade
 
 }//end DBProject
