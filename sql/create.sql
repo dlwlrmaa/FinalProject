@@ -58,7 +58,7 @@ CREATE TABLE Booking( bID Numeric NOT NULL,
 					  noOfPeople Numeric,
 					  price Numeric(6,2) NOT NULL,
 					  PRIMARY KEY(bID));
-					  
+
 CREATE TABLE Repair( rID Numeric NOT NULL,
 					 hotelID Numeric NOT NULL DEFAULT 0,
 					 roomNo Numeric NOT NULL DEFAULT 0,
@@ -67,14 +67,14 @@ CREATE TABLE Repair( rID Numeric NOT NULL,
 					 description TEXT,
 					 repairType CHAR(10),
 					 PRIMARY KEY(rID));
-					 
+
 CREATE TABLE Request( reqID Numeric NOT NULL,
 					  managerID Numeric NOT NULL DEFAULT 0,
 					  repairID Numeric NOT NULL DEFAULT 0,
 					  requestDate Date NOT NULL,
 					  description TEXT,
 					  PRIMARY KEY(reqID));
-					  
+
 CREATE TABLE Assigned( asgID Numeric NOT NULL,
 					   staffID Numeric NOT NULL DEFAULT 0,
 					   hotelID Numeric NOT NULL DEFAULT 0,
@@ -87,14 +87,14 @@ ADD CONSTRAINT managerConstraint
 FOREIGN KEY(manager)
 REFERENCES Staff(SSN)
 ON DELETE SET DEFAULT;
- 					
+
 ALTER TABLE Staff
 ADD CONSTRAINT employerConstraint
 FOREIGN KEY(employerID)
 REFERENCES Hotel(hotelID)
 ON DELETE CASCADE;
 
-					   
+
 ALTER TABLE Room
 ADD CONSTRAINT weakEntityConstraint
 FOREIGN KEY(hotelID)
@@ -228,4 +228,4 @@ COPY Assigned(asgID,
 			  roomNo)
 FROM 'assigned.csv'
 WITH DELIMITER ',';		
-	
+
