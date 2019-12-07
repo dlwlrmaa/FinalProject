@@ -1574,7 +1574,32 @@ public static void listHotelRoomBookingsForAWeek(DBProject esql){
    
    public static void topKMaintenanceCompany(DBProject esql){//DONE
 	  // List Top K Maintenance Company Names based on total repair count (descending order)
-      // Your code goes here.
+  String k;
+  String query;
+  while(true) {
+     System.out.println("Please enter a range: ");
+     try {
+        k = in.readLine();
+        break;
+     } catch (Exception e) {
+        System.out.println("Your input is invalid!");
+        continue;
+     }
+  }
+  
+  
+  try {
+   System.out.println(
+      "\n\n-------------------------------------\n" +
+      "              FIND REPAIRS PER YEAR      	               \n" +
+      "------------------------------------------\n");
+     query = "SELECT M.name, COUNT(DISTINCT R.rID)\nFROM MaintenanceCompany M, Repair R WHERE M.cmpID = R.mCompany GROUP BY M.name ORDER BY COUNT(DISTINCT R.rID) DESC LIMIT " + k + ";";
+     esql.executeQuery(query);
+     System.out.println(
+         "\n\n-------------------------------------\n");
+  } catch (Exception e) {
+     System.err.println(e.getMessage());
+  }
       
 	 
    }//end topKMaintenanceCompany
