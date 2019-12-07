@@ -1205,7 +1205,7 @@ public class DBProject {
         int yearInput;
         int monthInput;
         int dayInput;
-        boolean isLeap;
+        boolean isLeap = false;
 
                 while(true) {
                         System.out.print("Input booking date year: ");
@@ -1235,9 +1235,7 @@ public class DBProject {
                         } else {
                                 isLeap = true;
                          }
-                else {
-                        isLeap = false;
-                }
+                
 
           while(true) {
                   System.out.print("Input booking date month: ");
@@ -1306,6 +1304,7 @@ public class DBProject {
                 } catch (Exception e) {
                         System.err.println("Query failed: " + e.getMessage());
             }
+         }
 
    }//end listHotelRoomBookingsForAWeek
    
@@ -1318,7 +1317,7 @@ public class DBProject {
                 try{
                         k = Integer.parseInt(in.readLine());
                         break;
-                        }catch(Exception e){
+                  }catch(Exception e){
                                 System.out.println("Your Input is invalid!");
                                 continue;
                         }
@@ -1403,6 +1402,8 @@ public class DBProject {
                                 }
                         }
                         break;
+                     }
+                        
                         catch (Exception e) {
                                 System.out.println("Your input is invalid!");
                                 continue;
@@ -1489,6 +1490,8 @@ public class DBProject {
                                 }
                         }
                         break;
+                     }
+                     
                         catch (Exception e) {
                                 System.out.println("Your input is invalid!");
                                 continue;
@@ -1496,20 +1499,20 @@ public class DBProject {
           };
 
 
-    String fdate = monthInput + "/" + dayInput + "/" + yearInput;
+    String finaldate = monthInput + "/" + dayInput + "/" + yearInput;
     System.out.println("Your inputted end date is: ");
-    System.out.println(fdate);
-    String endDate = fdate;
+    System.out.println(finaldate);
+    String endDate = finaldate;
 
 
-            string query;
+            String query;
                 try {
                         System.out.println(
          "\n\n----------------------------------------------\n" +
          "              Highest Prices                       \n" +
          "----------------------------------------------\n");
 
-         query = String.format("SELECT B.price AS HighestPrices FROM Booking B WHERE  B.bookingDate > " + startDate + " AND B.bookingDate < " endDate + "GROUP BY B.price STOP AFTER " + k + ";");
+         query = String.format("SELECT B.price AS HighestPrices FROM Booking B WHERE  B.bookingDate > " + startDate + " AND B.bookingDate < " + endDate + "GROUP BY B.price STOP AFTER " + k + ";");
          esql.executeQuery(query);
          System.out.println(
          "\n\n----------------------------------------------\n");
@@ -1517,7 +1520,7 @@ public class DBProject {
                         System.err.println("Query failed: " + e.getMessage());
             }
       
-      
+         
    }//end topKHighestRoomPriceForADateRange
    
    public static void topKHighestPriceBookingsForACustomer(DBProject esql){
@@ -1548,14 +1551,14 @@ public class DBProject {
         }
 
 
-        string query;
+        String query;
                 try {
                         System.out.println(
          "\n\n----------------------------------------------\n" +
          "        Customer's Highest Booking Prices                       \n" +
          "----------------------------------------------\n");
 
-         query = String.format("SELECT B.price AS CusomerPrices FROM Booking, B Customer C WHERE C.customerID = " + customerID + "AND C.customerID = B.customer GROUP BY B.price STOP AFTER " + k + ";");
+         query = String.format("SELECT B.price AS CusomerPrices FROM Booking, B Customer C WHERE C.customerID = " + customerID + " ORDER BY price DESC LIMIT " + k + ";"); 
          esql.executeQuery(query);
          System.out.println(
          "\n\n----------------------------------------------\n");
