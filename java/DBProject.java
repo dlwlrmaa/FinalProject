@@ -1580,14 +1580,15 @@ public static void listHotelRoomBookingsForAWeek(DBProject esql){
       	  System.out.println("Your input is invalid!");
           continue;
      }
+   }
 
 	
-
+try{
 	System.out.println(
       "\n\n-------------------------------------\n" +
       "              REPAIRS Made                             \n" +
       "------------------------------------------\n");
-     query = "SELECT R.rid, R.repairType, R.hid, R.roomNo \nFROM MaintenanceCompany M, Repair R WHERE M.cmpID = R.mCompany AND M.name = " + name + " ;";
+      query = "SELECT M.name, R.rID, R.repairType, R.hotelID, R.roomNo FROM Repair R, MaintenanceCompany M WHERE M.cmpID = " + name + " AND M.cmpID = R.mCompany;";
      esql.executeQuery(query);
      System.out.println(
          "\n\n-------------------------------------\n");
