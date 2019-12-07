@@ -228,9 +228,9 @@ public class DBProject {
    
    public static void Greeting(){
       System.out.println(
-         "\n\n*******************************************************\n" +
+         "\n\n----------------------------------------------\n" +
          "              User Interface      	               \n" +
-         "*******************************************************\n");
+         "----------------------------------------------\n");
    }//end Greeting
 
    /*
@@ -353,13 +353,13 @@ public class DBProject {
            );
            esql.executeUpdate(query);
            System.out.println(
-               "\n\n*******************************************************\n" +
-                "              ADDED New Customer      	               \n" +
-               "*******************************************************\n");
+               "\n\n----------------------------------------------\n" +
+                "              Your New Customer      	               \n" +
+               "----------------------------------------------\n");
            query = String.format("SELECT * FROM Customer WHERE fName='%s';", fName);
            esql.executeQuery(query);
            System.out.println(
-               "\n\n*******************************************************\n");
+               "\n\n----------------------------------------------\n");
         }catch (SQLException e){
            System.out.println("Please Check if it's a valid date and gender is either Male or Female.");
         }
@@ -420,12 +420,12 @@ public class DBProject {
            "VALUES(%s, %s, '%s');", hotelID, roomNo, roomType);
            esql.executeUpdate(query);
            System.out.println(
-               "\n\n*******************************************************\n" +
-                "              Added New Room      	               \n" +
-               "*******************************************************\n");
+               "\n\n----------------------------------------------\n" +
+                "              Your New Room      	               \n" +
+               "----------------------------------------------\n");
             esql.executeQuery(String.format("SELECT * FROM Room WHERE hotelID=%s ORDER BY roomNo", hotelID));
            System.out.println(
-               "\n\n*******************************************************\n");
+               "\n\n----------------------------------------------\n");
            
           }catch(SQLException e){
              System.out.println("There already exists a room there!");
@@ -457,8 +457,8 @@ public class DBProject {
 			System.out.print("Input Company Name: ");
 			try {
 				compName = in.readLine();
-				if(compName.length() > 30) {
-					throw new RuntimeException("Company name cannot be longer than 30 characters");
+				if(compName.length() > 50) {
+					throw new RuntimeException("Company name cannot be longer than 50 characters");
 				}
 				break;
 			} catch (Exception e) {
@@ -504,12 +504,12 @@ public class DBProject {
 			query = "INSERT INTO MaintenanceCompany (cmpID, name, address, isCertified) VALUES (" + compID + ", \'" + compName + "\', \'" + compAddress + "\', \'" + isCertified + "\');";
 			esql.executeUpdate(query);
 			 System.out.println(
-         "\n\n*******************************************************\n" +
-         "              ADDED MAINTENANCE COMPANY      	               \n" +
-         "*******************************************************\n");
+         "\n\n----------------------------------------------\n" +
+         "              Your New Maintanence Company      	               \n" +
+         "----------------------------------------------\n");
          esql.executeQuery(String.format("SELECT * FROM MaintenanceCompany WHERE cmpID=%s", compID));
          System.out.println(
-            "\n\n*******************************************************\n");
+            "\n\n----------------------------------------------\n");
 
 		}catch(Exception e) {
 			System.err.println("Query failed: " + e.getMessage());
@@ -691,13 +691,13 @@ public class DBProject {
 			query = "INSERT INTO Repair (rID, hotelID, roomNo, mCompany, repairDate, description, repairType) VALUES (" + repairID + ", \'" + hotelID + "\', \'" + roomNum + "\', \'" + maintCompany + "\', \'" + repairDate + "\', \'" + description + "\', \'" + repairType + "\');";
 			esql.executeUpdate(query);
 			System.out.println(
-         "\n\n*******************************************************\n" +
-         "              AddED New REPAIR      	               \n" +
-         "*******************************************************\n");
+         "\n\n----------------------------------------------\n" +
+         "              Your New Repair      	               \n" +
+         "----------------------------------------------\n");
          query = String.format("SELECT * FROM Repair WHERE rID='%s';", repairID);
          esql.executeQuery(query);
          System.out.println(
-         "\n\n*******************************************************\n");
+         "\n\n----------------------------------------------\n");
 		} catch (Exception e) {
 			System.err.println("Query failed: " + e.getMessage());
 	    }
@@ -866,13 +866,13 @@ public class DBProject {
                   			query = "INSERT INTO Booking( bID, customer, hotelID, roomNo, bookingDate, noOfPeople, price) VALUES (" + bID + ", \'" + customerID + "\', \'" + hotelID + "\', \'" + roomNo + "\', \'" + tempDate + "\', \'" + noPeople + "\', \'" + price + "\');";
                   			esql.executeUpdate(query);
                   			System.out.println(
-                           "\n\n*******************************************************\n" +
-                           "              ADDED YOUR BOOKING      	               \n" +
-                           "*******************************************************\n");
+                           "\n\n----------------------------------------------\n" +
+                           "              Your Booking      	               \n" +
+                           "----------------------------------------------\n");
                            query = String.format("SELECT * FROM Booking WHERE bID='%s';", bID);
                            esql.executeQuery(query);
                            System.out.println(
-                           "\n\n*******************************************************\n");
+                           "\n\n----------------------------------------------\n");
                           break;
                 			}catch(Exception e){
                   				System.out.println("Query failed: " + e.getMessage());
@@ -899,7 +899,7 @@ public class DBProject {
 	  // Given Staff SSN, HotelID, roomNo Assign the staff to the room 
       // Your code goes here.
 
-	int assignedID = 2001;
+	//int assignedID = 2001;
 
 	int staffSSN;
 	while(true) {
@@ -939,13 +939,16 @@ public class DBProject {
 
 	String query;
 		try {
-			query = "INSERT INTO Assigned (asgID, staffID, hotelID, roomNo) VALUES (" + assignedID + ", " + staffSSN + ", " + hotelID + ", " + roomNum + ");";
+			query = "INSERT INTO Assigned (asgID, staffID, hotelID, roomNo) VALUES (" + "(SELECT COUNT(*)+1 FROM Customer)" + ", " + staffSSN + ", " + hotelID + ", " + roomNum + ");";
 			esql.executeUpdate(query);
 			System.out.println(
-         "\n\n*******************************************************\n" +
+         "\n\n----------------------------------------------\n" +
          "              ASSIGNED HOUSE CLEANING STAFF      	               \n" +
-         "*******************************************************\n");
-			assignedID = assignedID + 1;
+         "----------------------------------------------\n");
+			query = String.format("SELECT * FROM Assigned WHERE staffID='%s';", staffSSN);
+         esql.executeQuery(query);
+         System.out.println(
+         "\n\n----------------------------------------------\n");
 		} catch (Exception e) {
 			System.out.println("Query failed: " + e.getMessage());
 		}		
@@ -985,7 +988,7 @@ public class DBProject {
          continue;
       }
    }   
-   //get repairID
+   
    while(true) {
       System.out.print("Input Repair ID: ");
       try {
@@ -1078,17 +1081,12 @@ public class DBProject {
         continue;
       }
     };
-        String finaldate = monthInput + "/" + dayInput + "/" + yearInput;
-        String requestDate = finaldate;
-    //String finaldate = monthInput + "/" + dayInput + "/" + yearInput;
-    System.out.println("Your inputted date is (In the format of MM/dd/yyyy ) : ");
-    System.out.println(finaldate);
-    //String requestDate = finaldate;
-
-
-
-
-   //get Description
+        String fdate = monthInput + "/" + dayInput + "/" + yearInput;
+        String requestDate =fdate;
+    
+    System.out.println("Your date is: ");
+    System.out.println(fdate);
+    
    while(true) {
       System.out.print("Input repair description: ");
       try {
@@ -1104,6 +1102,14 @@ public class DBProject {
   try {
       query = "INSERT INTO Request(reqID, managerID, repairID, requestDate, description) VALUES( " + reqID + ", " + staffSSN + ", " + repairID + ",\' " + requestDate + " \', \' " + description + " \');";
       esql.executeUpdate(query);
+      System.out.println(
+         "\n\n----------------------------------------------\n" +
+         "              Your New Repair Request      	               \n" +
+         "----------------------------------------------\n");
+			query = String.format("SELECT * FROM Request WHERE reqID='%s';", reqID);
+         esql.executeQuery(query);
+         System.out.println(
+         "\n\n----------------------------------------------\n");
    }
    catch(Exception e) {
       System.out.println("Query failed. " + e.getMessage());
@@ -1117,10 +1123,6 @@ public class DBProject {
       // Your code goes here.
    		int hotelID;
    		while(true){
-   			System.out.println(
-         "\n\n*******************************************************\n" +
-         "              FIND AVAILABLE ROOMS!      	               \n" +
-         "*******************************************************\n");
    			System.out.println("Please input hotel ID: ");
    			try{
    				hotelID = Integer.parseInt(in.readLine());
@@ -1133,10 +1135,15 @@ public class DBProject {
 ;
    		String query;
    			try{
-   			
-				query = "SELECT COUNT(R.roomNo) FROM Room R WHERE R.hotelID = " + hotelID + "\nEXCEPT\nSELECT COUNT(B.roomNo) FROM Booking B WHERE B.hotelID = " + hotelID + ";";
-   				esql.executeQuery(query);
 
+            System.out.println(
+                  "\n\n----------------------------------------------\n" +
+                  "              AVAILABLE ROOMS     	               \n" +
+                  "----------------------------------------------\n");
+               query = "SELECT COUNT(R.roomNo) AS AvailableRooms FROM Room R WHERE R.hotelID = " + hotelID + "\nEXCEPT\nSELECT COUNT(B.roomNo) FROM Booking B WHERE B.hotelID = " + hotelID + ";";
+               esql.executeQuery(query);
+               System.out.println(
+                  "\n\n----------------------------------------------\n" );
    			}catch(Exception e) {
    				System.out.println("Query failed: " + e.getMessage());
    			}
@@ -1150,10 +1157,7 @@ public class DBProject {
    		int hotelID;
 
    		while(true){
-   			System.out.println(
-         "\n\n*******************************************************\n" +
-         "              FIND BOOKED ROOMS!      	               \n" +
-         "*******************************************************\n");
+   			
    			System.out.println("Please input hotel ID: ");
    			try{
    				hotelID = Integer.parseInt(in.readLine());
@@ -1166,8 +1170,14 @@ public class DBProject {
    		String query;
    		while(true){
    			try{
-   				query = "SELECT count(B.roomNo)\nFROM Booking B WHERE hotelID = " + hotelID + ";";
-   				esql.executeQuery(query);
+               System.out.println(
+                "\n\n------------------------------------------\n" +
+               "               BOOKED ROOMS      	               \n" +
+               "----------------------------------------------\n");
+   				query = "SELECT count(B.roomNo)\n AS ReservedRooms FROM Booking B WHERE hotelID = " + hotelID + ";";
+               esql.executeQuery(query);
+               System.out.println(
+                "\n\n------------------------------------------\n");
    				break;
    			}catch(Exception e){
    				System.out.println("Query failed: " + e.getMessage());
