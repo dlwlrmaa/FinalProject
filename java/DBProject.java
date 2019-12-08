@@ -1277,6 +1277,8 @@ public static void listHotelRoomBookingsForAWeek(DBProject esql){
         System.out.println("Your inputted date is: ");
         System.out.println(fdate);
         String bookingDate = fdate;
+        String endDate = monthInput + "/" + (dayInput+7) + "/" + yearInput;
+        String endBooking = endDate;
 
    	
 	  String query;
@@ -1286,7 +1288,7 @@ public static void listHotelRoomBookingsForAWeek(DBProject esql){
          "              Bookings                       \n" +
          "----------------------------------------------\n");
 
-         query = String.format("SELECT B.roomNo AS BookedRooms FROM Booking B WHERE B.hotelID = " + hotelID + " AND B.bookingDate = " + fdate + ";");
+         query = "SELECT R.roomNo FROM Booking B, Room R WHERE B.hotelID = " + hotelID + " AND R.hotelID = " + hotelID + "AND B.bookingDate >= \'" + bookingDate + "\' AND B.bookingDate <= \'" + endBooking + "\';";
          esql.executeQuery(query);
          System.out.println(
          "\n\n----------------------------------------------\n");
@@ -1501,7 +1503,7 @@ public static void listHotelRoomBookingsForAWeek(DBProject esql){
          "              Highest Prices                       \n" +
          "----------------------------------------------\n");
 
-         query = String.format("SELECT B.price AS HighestPrices FROM Booking B WHERE  B.bookingDate > " + startDate + " AND B.bookingDate < " + endDate + "GROUP BY B.price STOP AFTER " + k + ";");
+         query = "SELECT * FROM Room R, Booking B WHERE B.bookingDate >= \'" + startDate + "\' AND B.bookingDate <= \'" + endDate + "\' ORDER BY B.price DESC LIMIT " + k + ";";
          esql.executeQuery(query);
          System.out.println(
          "\n\n----------------------------------------------\n");
@@ -1547,7 +1549,7 @@ public static void listHotelRoomBookingsForAWeek(DBProject esql){
          "        Customer's Highest Booking Prices                       \n" +
          "----------------------------------------------\n");
 
-         query = String.format("SELECT B.price AS CusomerPrices FROM Booking, B Customer C WHERE C.customerID = " + customerID + " ORDER BY price DESC LIMIT " + k + ";"); 
+         query = "SELECT B.price FROM Booking B, Customer C WHERE C.customerID = " + customerID + " ORDER BY price DESC LIMIT " + k + ";"; 
          esql.executeQuery(query);
          System.out.println(
          "\n\n----------------------------------------------\n");
@@ -1561,9 +1563,175 @@ public static void listHotelRoomBookingsForAWeek(DBProject esql){
    public static void totalCostForCustomer(DBProject esql){//DONE
 	  // Given a hotelID, customerID and date range get the total cost incurred by the customer
     //PRICE PER DAY = ROOM COST PER DAY
-      // Your code goes here.
-   	
-      // ...
+    int hotelID;
+    int customerID;
+    while(true){
+       System.out.println("Please input hotel ID: ");
+       try{
+          hotelID = Integer.parseInt(in.readLine());
+          break;
+       }catch(Exception e){
+          System.out.println("Your Input is invalid!");
+          continue;
+       }
+    }
+   while(true){
+    System.out.println("Please input customer ID: ");
+    try{
+       customerID = Integer.parseInt(in.readLine());
+       break;
+    }catch(Exception e){
+       System.out.println("Your Input is invalid!");
+       continue;
+    }
+   }
+   int inputmonth;
+	int inputday;
+	int inputyear;
+	while(true){
+            System.out.print("Please input Starting Date Year: ");
+            try{
+                inputyear = Integer.parseInt(in.readLine());
+                if(inputyear == 0) {
+                    throw new RuntimeException("Starting date year cannot be left blank.");
+                }
+                if(inputyear < 0 || inputyear > 9999) {
+                    throw new RuntimeException("Please input valid year (1 - 9999).");
+                }
+                break;
+            }catch(Exception e) {
+                System.out.println("Your input is invalid");
+            }
+        }
+        while(true){
+            System.out.print("Please input starting Date Month: ");
+            try{
+                inputmonth = Integer.parseInt(in.readLine());
+                if(inputmonth == 0) {
+                    throw new RuntimeException("starting date month cannot be left blank.");
+                }
+                if(inputmonth < 0 || inputmonth > 12) {
+                    throw new RuntimeException("Please input valid month (1 - 12).");
+                }
+                break;
+            }catch(Exception e) {
+                System.out.println("Your input is invalid");
+            }
+        }
+        while(true){
+            System.out.print("Please input starting Date Day: ");
+            try{
+                inputday = Integer.parseInt(in.readLine());
+                if(inputday == 0) {
+                    throw new RuntimeException("starting date day cannot be left blank.");
+                }
+                if(inputmonth == 1 || inputmonth == 3 || inputmonth == 5 || inputmonth == 7 || inputmonth == 8 || inputmonth == 10 || inputmonth == 12) {
+                    if(inputday <= 0 || inputday > 31) {
+                        throw new RuntimeException("Please input valid date.");
+                    }
+                }
+                if(inputmonth == 4 || inputmonth == 6 || inputmonth == 9 || inputmonth == 11) {
+                    if(inputday <= 0 || inputday > 30) {
+                        throw new RuntimeException("Please input valid date.");
+                    }
+                }
+                if(inputmonth == 2) {
+                    if(inputday <= 0 || inputday > 28) {
+                        throw new RuntimeException("Please input valid date.");
+                    }
+                }
+                break;
+            }catch(Exception e) {
+                System.out.println("Your input is invalid");
+            }
+        }
+
+        String finaldate = inputmonth + "/" + inputday + "/" + inputyear;
+        System.out.println("Your inputted date is (In the format of MM/dd/yyyy ) : ");
+        System.out.println(finaldate);
+        String startDate = finaldate;
+
+	while(true){
+	   
+            System.out.print("Please input End Date Year: ");
+            try{
+                inputyear = Integer.parseInt(in.readLine());
+                if(inputyear == 0) {
+                    throw new RuntimeException("End date year cannot be left blank.");
+                }
+                if(inputyear < 0 || inputyear > 9999) {
+                    throw new RuntimeException("Please input valid year (1 - 9999).");
+                }
+                break;
+            }catch(Exception e) {
+                System.out.println("Your input is invalid");
+            }
+        }
+        while(true){
+            System.out.print("Please input End Date Month: ");
+            try{
+                inputmonth = Integer.parseInt(in.readLine());
+                if(inputmonth == 0) {
+                    throw new RuntimeException("End date month cannot be left blank.");
+                }
+                if(inputmonth < 0 || inputmonth > 12) {
+                    throw new RuntimeException("Please input valid month (1 - 12).");
+                }
+                break;
+            }catch(Exception e) {
+                System.out.println("Your input is invalid");
+            }
+        }
+        while(true){
+            System.out.print("Please input End Date Day: ");
+            try{
+                inputday = Integer.parseInt(in.readLine());
+                if(inputday == 0) {
+                    throw new RuntimeException("End date day cannot be left blank.");
+                }
+                if(inputmonth == 1 || inputmonth == 3 || inputmonth == 5 || inputmonth == 7 || inputmonth == 8 || inputmonth == 10 || inputmonth == 12) {
+                    if(inputday <= 0 || inputday > 31) {
+                        throw new RuntimeException("Please input valid date.");
+                    }
+                }
+                if(inputmonth == 4 || inputmonth == 6 || inputmonth == 9 || inputmonth == 11) {
+                    if(inputday <= 0 || inputday > 30) {
+                        throw new RuntimeException("Please input valid date.");
+                    }
+                }
+                if(inputmonth == 2) {
+                    if(inputday <= 0 || inputday > 28) {
+                        throw new RuntimeException("Please input valid date.");
+                    }
+                }
+                break;
+            }catch(Exception e) {
+                System.out.println("Your input is invalid");
+            }
+        }
+
+        String finishdate = inputmonth + "/" + inputday + "/" + inputyear;
+        System.out.println("Your inputted date is (In the format of MM/dd/yyyy ) : ");
+        System.out.println(finishdate);
+        String endDate = finishdate;
+
+
+
+	String query;
+		try{
+         System.out.println(
+      "\n\n-------------------------------------\n" +
+      "              Customer Total                           \n" +
+      "------------------------------------------\n");
+			query = "SELECT C.customerID, SUM(B.price) FROM Customer C, Booking B WHERE B.hotelID = " + hotelID + " AND C.customerID = " + customerID +  " AND B.bookingDate >= \'" + startDate + "\' AND B.bookingDate <= \'" + endDate + "\' GROUP BY C.customerID;";
+         esql.executeQuery(query);
+         System.out.println(
+            "\n\n-------------------------------------\n");
+		}catch(Exception e){
+			System.out.println("Query failed. " + e.getMessage());
+		}
+
+
    }//end totalCostForCustomer
    
    public static void listRepairsMade(DBProject esql){//DONE
